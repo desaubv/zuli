@@ -1,9 +1,11 @@
+
 import React from "react";
 import {
     TouchableOpacity,
     Text,
     View,
-    StyleSheet
+    StyleSheet,
+    Linking
 } from "react-native";
 
 import { useTheme } from "theme/useTheme";
@@ -16,14 +18,18 @@ const Button = ({
     onPress,
 
     variant = "primary",
-    
+
     iconLeft,
     iconRight,
     icon,
-    
+    iconTop,
+
     iconSize = 20,
     iconStrokeWidth = 2,
-    
+    iconColor,
+
+    numberOfLines=1,
+
     disabled = false,
     radius = "sm",
 
@@ -33,7 +39,6 @@ const Button = ({
 }) => {
 
     const { theme } = useTheme();
-
     const router = useRouter();
 
     const handlePress = async () => {
@@ -66,11 +71,11 @@ const Button = ({
     const isCustom = variant === "custom";
     const isGhost = variant === "ghost";
 
-    const iconColor =
+    const colorIcon = iconColor ?? (
         isPrimary
             ? theme.colors.text.button
-            : theme.colors.primary;
-
+            : theme.colors.primary
+    );
 
     const renderIcon = (IconComponent) => {
         if (!IconComponent) {
@@ -81,11 +86,10 @@ const Button = ({
             <IconComponent
                 size={iconSize}
                 strokeWidth={iconStrokeWidth}
-                color={iconColor}
+                color={colorIcon}
             />
         );
     };
-
 
     const styles = StyleSheet.create({
         button: {
@@ -99,7 +103,8 @@ const Button = ({
 
             borderRadius: theme.radius[radius] ?? theme.radius.sm,
 
-            flexDirection: "row",
+            flexDirection: iconTop ? "column" : "row",
+
             alignItems: "center",
             justifyContent: "center",
 
@@ -113,9 +118,7 @@ const Button = ({
                     ? theme.thicknesses.none
                     : theme.thicknesses.sm,
 
-            outlineColor:
-                theme.colors.primary,
-
+            outlineColor: theme.colors.primary,
             outlineStyle: "solid",
 
             opacity: disabled ? 0.5 : 1
@@ -134,21 +137,26 @@ const Button = ({
             marginLeft: theme.spacing.sm,
         },
 
+        iconTop: {
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: children ? theme.spacing.xs : 0,
+        },
+
         text: {
-            color: iconColor,
+            color: colorIcon,
 
             fontSize: theme.text.baseSize,
             fontWeight: "600"
         }
     });
 
-
     return (
         <TouchableOpacity
             onPress={handlePress}
             disabled={disabled}
             activeOpacity={0.7}
-            style={[styles.button, style]}
+            style={[styles.button, customStyle, style]}
         >
 
             {isIconOnly ? (
@@ -160,6 +168,12 @@ const Button = ({
             ) : (
 
                 <>
+                    {iconTop && (
+                        <View style={styles.iconTop}>
+                            {renderIcon(iconTop)}
+                        </View>
+                    )}
+
                     {iconLeft && (
                         <View
                             style={[
@@ -172,7 +186,10 @@ const Button = ({
                     )}
 
                     {children && (
-                        <Text style={[styles.text, textStyle]}>
+                        <Text 
+                            style={[styles.text, textStyle]}
+                            numberOfLines={numberOfLines}
+                        >
                             {children}
                         </Text>
                     )}

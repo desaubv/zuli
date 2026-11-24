@@ -1,27 +1,28 @@
 {
   "expo": {
-    "name": "Joby",
-    "slug": "joby",
-    "scheme": "joby",
+    "name": "Zuli",
+    "slug": "zuli",
+    "scheme": "zuli",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/zuli_512.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#f0f6fe"
+        "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/zuli_512.png"
     },
     "plugins": [
       "expo-router",
-      "expo-status-bar",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-notifications",
+      "expo-font"
     ]
   }
 }
