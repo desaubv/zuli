@@ -16,7 +16,7 @@ import {
     Calendar,
     UserGroup,
     Pill,
-    NotebookPen
+    Notebook
 } from "lucide-react-native";
 
 export default function RootLayout() {
@@ -61,8 +61,8 @@ export default function RootLayout() {
 
                         <NavigationItem
                             label="Notas"
-                            href="/notes"
-                            icon={NotebookPen}
+                            href="/notebooks"
+                            icon={Notebook}
                         />
 
                         <NavigationItem

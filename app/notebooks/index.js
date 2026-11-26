@@ -1,6 +1,7 @@
 import AppContainer from "components/layout/AppContainer";
 import Title from "components/Text/Title";
 import Button from "components/ui/Button";
+import NotebookRepository from "database/repositories/notebook/notebookRepository";
 import NotebookHeader from "fragments/notebook/NotebookHeader";
 import NotebookListItem from "fragments/notebook/NotebookListItem";
 import NoteItem from "fragments/notebook/NoteItem";
@@ -17,7 +18,17 @@ export default function NotesScreen() {
 
     const insets = useSafeAreaInsets();
 
-    const [notebooks, setNotebooks] = useState([1]);
+    const [notebooks, setNotebooks] = useState([]);
+
+    useEffect(() => {
+        const getNotebooks = async() => {
+            const data = await NotebookRepository.getNotebooks();
+
+            setNotebooks(data);
+        }
+
+        getNotebooks();
+    }, []);
 
     const styles = StyleSheet.create({
         container: {
