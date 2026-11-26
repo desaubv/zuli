@@ -15,8 +15,7 @@ const Subtitle = ({
                 {
                     fontSize: theme.text.subtitleSize,
                     lineHeight: theme.text.subtitleSize * 1.3,
-                    fontWeight: "600",
-                    marginBottom: theme.spacing.sm,
+                    fontWeight: "600"
                 },
                 style,
             ]}

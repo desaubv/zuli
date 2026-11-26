@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-
-import { ActivityIndicator, View } from "react-native";
 import { Stack } from "expo-router";
+
+import { NavigationItem } from "components/navigation/NavigationBar";
+import AppLayout from "components/layout/AppLayout";
+import { ActivityIndicator, View } from "react-native";
+
+import { ThemeProvider } from "theme/themeProvider";
+
+import { initializeDatabase } from "database/migrations";
+import NotificationService from "services/notification";
 
 import {
     House,
@@ -11,23 +18,12 @@ import {
     Pill,
     NotebookPen
 } from "lucide-react-native";
-import AppLayout from "components/layout/AppLayout";
-import { NavigationItem } from "components/navigation/NavigationBar";
-
-import { initializeDatabase } from "database/migrations";
-import NotificationService from "services/notification";
-
-import { ThemeProvider } from "theme/themeProvider";
 
 export default function RootLayout() {
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        async function initNotifications() {
-            NotificationService.initialize();
-        }
-
-        async function initDB() {
+        async function initializeDB() {
             try {
                 await initializeDatabase();
                 setReady(true);
@@ -36,8 +32,12 @@ export default function RootLayout() {
             }
         }
 
-        initNotifications();
-        initDB();
+        async function initializeNotifications() {
+            NotificationService.initialize();
+        }
+
+        initializeDB();
+        initializeNotifications();
     }, []);
 
     if (!ready) {
@@ -91,13 +91,13 @@ export default function RootLayout() {
                     </>
                 }
             >
-
                 <Stack
                     screenOptions={{
                         headerShown: false,
                         contentStyle: {
                             backgroundColor: "white"
                         }
+
                     }}
                 />
 

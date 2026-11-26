@@ -18,14 +18,15 @@ export default function Line({
 }) {
     const styles = StyleSheet.create({
         container: {
-            marginTop: top ?? 0,
-            marginBottom: bottom ?? 0,
+
 
             flexDirection: "row",
             alignItems: "center",
         },
-        
+
         line: {
+            marginTop: top ?? 0,
+            marginBottom: bottom ?? 0,
             alignSelf: "center",
         },
 
