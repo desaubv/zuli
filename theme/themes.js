@@ -52,7 +52,7 @@ const baseTheme = {
     },
 
     colors: {
-        "background": "#f8fcf7",
+        "background": "#ffffff",
         "surface": "#E2E8F0",
 
         "primary": "#0F766E",

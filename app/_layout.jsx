@@ -18,6 +18,7 @@ import {
     Pill,
     Notebook
 } from "lucide-react-native";
+import MainLayout from "components/layout/MainLayout";
 
 export default function RootLayout() {
     const [ready, setReady] = useState(false);
@@ -50,58 +51,7 @@ export default function RootLayout() {
 
     return (
         <ThemeProvider>
-            <AppLayout
-                navigation={
-                    <>
-                        <NavigationItem
-                            label="Inicio"
-                            href="/"
-                            icon={House}
-                        />
-
-                        <NavigationItem
-                            label="Notas"
-                            href="/notebooks"
-                            icon={Notebook}
-                        />
-
-                        <NavigationItem
-                            label="Tareas"
-                            href="/tasks"
-                            icon={CircleCheck}
-                        />
-
-                        <NavigationItem
-                            label="Calendario"
-                            href="/calendar"
-                            icon={Calendar}
-                        />
-
-                        <NavigationItem
-                            label="Reuniones"
-                            href="/meetings"
-                            icon={UserGroup}
-                        />
-
-                        <NavigationItem
-                            label="Medicamentos"
-                            href="/medications"
-                            icon={Pill}
-                        />
-                    </>
-                }
-            >
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                        contentStyle: {
-                            backgroundColor: "white"
-                        }
-
-                    }}
-                />
-
-            </AppLayout>
+            <MainLayout/>
         </ThemeProvider>
     );
 }
