@@ -6,10 +6,13 @@ import {
     View,
     StyleSheet
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { themes } from "theme/themes";
 
 import { useTheme } from "theme/useTheme";
 
 const AppLayout = ({ children, navigation }) => {
+    const insets = useSafeAreaInsets();
     const { theme } = useTheme();
 
     const [layout, setLayout] = useState({
@@ -23,22 +26,23 @@ const AppLayout = ({ children, navigation }) => {
         setLayout(newLayout);
     }, []);
 
+    const marginBottom = insets.bottom;
+    const marginTop = insets.top + 5;
+
     const styles = StyleSheet.create({
         container: {
-            flex: 1,
-            backgroundColor: "#fff",
+            flex: 1
         },
 
         content: {
             margin: 5,
             flex: 1,
-            minWidth: 0,
-                        
-            borderRadius: 100,
 
             marginLeft: layout.sidebarWidth == 0 ? 5 : layout.sidebarWidth,
-            marginBottom: layout.navbarHeight == 0 ? 5 : layout.navbarHeight,
-        }
+            marginBottom: layout.navbarHeight == 0 ? marginBottom : marginBottom + layout.navbarHeight,
+
+            marginTop: marginTop,
+        },
     });
 
     return (
@@ -53,6 +57,7 @@ const AppLayout = ({ children, navigation }) => {
             <View style={styles.content}>
                 {children}
             </View>
+
 
         </View>
     );

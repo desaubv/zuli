@@ -7,11 +7,21 @@ import {
     useWindowDimensions
 } from "react-native";
 
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withTiming,
+    Easing
+} from "react-native-reanimated";
+
 import { useTheme } from "theme/useTheme";
 import Button from "components/ui/Button";
 
 import { usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Logo from "components/ui/Logo";
+import Title from "components/Text/Title";
+import Text from "components/Text/Text";
 
 const NavigationBar = ({ children, onLayoutChange }) => {
     const { theme } = useTheme();
@@ -22,10 +32,25 @@ const NavigationBar = ({ children, onLayoutChange }) => {
     const isMobile = width < 768;
 
     const [expanded, setExpanded] = useState(false);
-    const [timer, setTimer] = useState(null);
 
-    const sidebarWidth = expanded ? 200 : 55;
+    const sidebarWidth = expanded ? 225 : 55;
     const navbarHeight = 82;
+
+    const animatedWidth = useSharedValue(55);
+
+    const animatedNavbarStyle = useAnimatedStyle(() => ({
+        width: isMobile ? undefined : animatedWidth.value
+    }));
+
+    useEffect(() => {
+        animatedWidth.value = withTiming(
+            expanded ? 225 : 55,
+            {
+                duration: 300,
+                easing: Easing.out(Easing.cubic)
+            }
+        );
+    }, [expanded, isMobile]);
 
     useEffect(() => {
         onLayoutChange?.({
@@ -40,22 +65,34 @@ const NavigationBar = ({ children, onLayoutChange }) => {
         });
     }, [expanded, isMobile, width, height, onLayoutChange]);
 
+
+    const timer = React.useRef(null);
+
     const handleExpand = () => {
-        const newTimer = setTimeout(() => {
+        if (timer.current) return;
+
+        timer.current = setTimeout(() => {
             setExpanded(true);
+            timer.current = null;
         }, 500);
-
-        setTimer(newTimer);
     };
-    
+
     const handleUnexpand = () => {
-        if(timer){
-            clearTimeout(timer);
-            setTimer(null);
+        if (timer.current) {
+            clearTimeout(timer.current);
+            timer.current = null;
         }
-        setExpanded(false);
 
+        setExpanded(false);
     };
+
+    useEffect(() => {
+        return () => {
+            if (timer.current) {
+                clearTimeout(timer.current);
+            }
+        };
+    }, []);
 
     const styles = StyleSheet.create({
         navbar: {
@@ -94,39 +131,36 @@ const NavigationBar = ({ children, onLayoutChange }) => {
 
                     flexDirection: "column",
 
-                    padding: theme.spacing.md,
+                    paddingHorizontal: theme.spacing.md,
                 }
             ),
         },
 
-        header: {
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: expanded ? "flex-end" : "center",
-
-            marginBottom: theme.spacing.lg,
-        },
 
         items: {
             flex: 1,
-
             flexDirection: isMobile ? "row" : "column",
-
             gap: isMobile ? 0 : theme.spacing.md,
-
             alignItems: isMobile ? "center" : "stretch",
-
             justifyContent: "flex-start",
+
+            marginVertical: isMobile ? 0 : theme.spacing.md
         },
 
-        toggle: {
-            width: 44,
-            height: 44,
 
-            alignItems: "center",
+        logoContainer: {
+            flexDirection: "row",
             justifyContent: "center",
+            alignItems: "center",
+            marginBottom: theme.spacing.md,
+            marginTop: theme.spacing.sm
+        },
 
-            borderRadius: theme.radius.md,
+        logoText: {
+            color: theme.colors.text.heading,
+            fontSize: theme.text.headingSize,
+            lineHeight: theme.text.headingSize,
+            fontWeight: "700",
         }
     });
 
@@ -150,17 +184,28 @@ const NavigationBar = ({ children, onLayoutChange }) => {
     };
 
     return (
-        <View style={styles.navbar}
+        <Animated.View
+            style={[
+                styles.navbar,
+                animatedNavbarStyle
+            ]}
             onPointerEnter={handleExpand}
             onPointerLeave={handleUnexpand}
         >
-            <View
-                style={styles.items}
-            >
+            <View style={styles.items}>
+                {
+                    !isMobile ? (
+                        <View style={styles.logoContainer}>
+                            <Logo
+                                size={25}
+                            />
+                            {expanded ? <Text style={styles.logoText}>uli</Text> : null}
+                        </View>
+                    ) : null
+                }
                 {React.Children.map(children, renderChild)}
             </View>
-
-        </View>
+        </Animated.View>
     );
 };
 

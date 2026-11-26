@@ -1,6 +1,7 @@
-import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
 
-import AppLayout from "components/layout/AppLayout";
+import { ActivityIndicator, View } from "react-native";
+import { Stack } from "expo-router";
 
 import {
     House,
@@ -10,16 +11,42 @@ import {
     Pill,
     NotebookPen
 } from "lucide-react-native";
+import AppLayout from "components/layout/AppLayout";
 import { NavigationItem } from "components/navigation/NavigationBar";
-import { ThemeProvider } from "theme/themeProvider";
-import { useEffect } from "react";
+
+import { initializeDatabase } from "database/migrations";
 import NotificationService from "services/notification";
 
+import { ThemeProvider } from "theme/themeProvider";
+
 export default function RootLayout() {
+    const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        NotificationService.initialize();
+        async function initNotifications() {
+            NotificationService.initialize();
+        }
+
+        async function initDB() {
+            try {
+                await initializeDatabase();
+                setReady(true);
+            } catch (error) {
+                console.error("Error inicializando SQLite:", error);
+            }
+        }
+
+        initNotifications();
+        initDB();
     }, []);
+
+    if (!ready) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center" }}>
+                <ActivityIndicator />
+            </View>
+        );
+    }
 
     return (
         <ThemeProvider>
@@ -64,9 +91,13 @@ export default function RootLayout() {
                     </>
                 }
             >
+
                 <Stack
                     screenOptions={{
-                        headerShown: false
+                        headerShown: false,
+                        contentStyle: {
+                            backgroundColor: "white"
+                        }
                     }}
                 />
 

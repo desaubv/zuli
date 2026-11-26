@@ -4,12 +4,9 @@ import {
     View,
     StyleSheet,
     Image,
-    TouchableOpacity,
 } from "react-native";
 
 import { useTheme } from "theme/useTheme";
-
-import Text from "../Text/Text";
 
 import placeholder from "../../../assets/placeholders/history.avif"
 

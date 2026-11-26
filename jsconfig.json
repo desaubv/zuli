@@ -8,6 +8,9 @@
             "fragments/*": ["./src/fragments/*"],
             "screens/*": ["./src/screens/*"],
             "services/*": ["./src/services/*"],
+            "database/*": ["./src/database/*"],
+            "db/*": ["./src/database/*"],
+            "repositories/*": ["./src/database/repositories/*"],
             "theme/*": ["./theme/*"]
         }
     },
