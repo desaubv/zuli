@@ -1,11 +1,14 @@
+import Modal from "components/modal/Modal";
 import Button from "components/ui/Button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import NotificationService from "services/notification";
 const { useTheme } = require("theme/useTheme");
 
 export default function HomeScreen() {
     const { theme } = useTheme();
+
+    const [ modal, setModal ] = useState(false);
 
     useEffect(() => {
         NotificationService.initialize();
@@ -24,11 +27,12 @@ export default function HomeScreen() {
     });
 
     const notification = async () => {
-        await NotificationService.scheduleInSeconds(
-            "Recordatorio",
-            "No olvides revisar tus pendientes.",
-            10
-        );
+        setModal(true);
+        // await NotificationService.scheduleInSeconds(
+        //     "Recordatorio",
+        //     "No olvides revisar tus pendientes.",
+        //     10
+        // );
     }
 
     return (
@@ -42,6 +46,17 @@ export default function HomeScreen() {
             </Text>
 
             <Button onPress={notification}>Ola</Button>
+
+            <Modal
+                isOpen={modal}
+                setIsOpen={setModal}
+                onClose={() => console.log("Holap")}
+                closeOnBackdropPress
+            >
+                <View>
+                    <Text>Hola</Text>
+                </View>
+            </Modal>
         </View>
     );
 }
