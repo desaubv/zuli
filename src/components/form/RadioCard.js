@@ -1,7 +1,7 @@
+import Text from "components/Text/Text";
 import React from "react";
 import {
     TouchableOpacity,
-    Text,
     View,
     StyleSheet
 } from "react-native";
@@ -85,10 +85,7 @@ const RadioCard = ({
 
         title: {
             color: theme.colors.text.primary,
-
             fontSize: theme.text.baseSize,
-            fontWeight: "600",
-
             marginBottom: theme.spacing.xs
         },
 

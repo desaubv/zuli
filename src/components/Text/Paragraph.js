@@ -5,6 +5,7 @@ import { useTheme } from "theme/useTheme";
 const Paragraph = ({
     children,
     style,
+    font = "default",
     ...props
 }) => {
     const { theme } = useTheme();
@@ -19,6 +20,7 @@ const Paragraph = ({
                 },
                 style,
             ]}
+            font={font}
             {...props}
         >
             {children}

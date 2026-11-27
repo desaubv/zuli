@@ -11,14 +11,20 @@ import SkeletonText from "../sketeton/SkeletonText";
 const Text = ({
     children,
     variant = "primary",
+    font = "default",
     style,
-    numberOfLines,
-    ellipsizeMode = "tail",
     loading = false,
+    ellipsizeMode = "tail",
+    numberOfLines,
     skeletonWidth = "100%",
     ...props
 }) => {
     const { theme } = useTheme();
+
+    const defaultfont = 
+        variant == "secondary" 
+            ? "regular" 
+            : "medium";
 
     const styles = StyleSheet.create({
         text: {
@@ -27,6 +33,10 @@ const Text = ({
                     ? theme.colors.text.secondary
                     : theme.colors.text.text,
             fontSize: theme.text.baseSize,
+            fontFamily: 
+                font == "default" 
+                    ? theme.text.fonts[defaultfont] 
+                    : theme.text.fonts[font],
         },
         
         skeletonContainer: {

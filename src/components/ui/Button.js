@@ -2,7 +2,6 @@
 import React from "react";
 import {
     TouchableOpacity,
-    Text,
     View,
     StyleSheet,
     Linking
@@ -10,6 +9,7 @@ import {
 
 import { useTheme } from "theme/useTheme";
 import { useRouter } from "expo-router";
+import Text from "components/Text/Text";
 
 
 const Button = ({
@@ -145,9 +145,7 @@ const Button = ({
 
         text: {
             color: colorIcon,
-
             fontSize: theme.text.baseSize,
-            fontWeight: "600"
         }
     });
 
@@ -186,7 +184,7 @@ const Button = ({
                     )}
 
                     {children && (
-                        <Text 
+                        <Text
                             style={[styles.text, textStyle]}
                             numberOfLines={numberOfLines}
                         >

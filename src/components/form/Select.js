@@ -8,7 +8,6 @@ import React, {
 
 import {
     View,
-    Text,
     TextInput,
     Pressable,
     StyleSheet,
@@ -25,6 +24,7 @@ import {
 
 import { useTheme } from "theme/useTheme";
 import { FormContext, useFormField } from "./FormContext";
+import Text from "components/Text/Text";
 
 export default function Select({
     name,
@@ -237,7 +237,6 @@ export default function Select({
 
         modalTitle: {
             fontSize: theme.text.baseSize,
-            fontWeight: "600",
             color: theme.colors.text.text,
             marginBottom: searchable ? 14 : 0,
         },

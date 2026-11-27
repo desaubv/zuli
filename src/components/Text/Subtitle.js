@@ -5,9 +5,15 @@ import { useTheme } from "theme/useTheme";
 const Subtitle = ({
     children,
     style,
+    font = "default",
     ...props
 }) => {
     const { theme } = useTheme();
+
+    const customFont = 
+        font == "default"
+            ? "semibold"
+            : font;
 
     return (
         <Text
@@ -15,10 +21,10 @@ const Subtitle = ({
                 {
                     fontSize: theme.text.subtitleSize,
                     lineHeight: theme.text.subtitleSize * 1.3,
-                    fontWeight: "600"
                 },
                 style,
             ]}
+            font={customFont}
             {...props}
         >
             {children}

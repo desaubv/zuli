@@ -20,7 +20,6 @@ import Button from "components/ui/Button";
 import { usePathname } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Logo from "components/ui/Logo";
-import Title from "components/Text/Title";
 import Text from "components/Text/Text";
 
 const NavigationBar = ({ children, onLayoutChange }) => {
@@ -160,7 +159,6 @@ const NavigationBar = ({ children, onLayoutChange }) => {
             color: theme.colors.text.heading,
             fontSize: theme.text.headingSize,
             lineHeight: theme.text.headingSize,
-            fontWeight: "700",
         }
     });
 

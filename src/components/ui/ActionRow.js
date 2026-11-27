@@ -1,7 +1,6 @@
 import React from "react";
 import {
     TouchableOpacity,
-    Text,
     View,
     StyleSheet
 } from "react-native";
@@ -9,6 +8,7 @@ import {
 import { useTheme } from "theme/useTheme";
 import { useRouter } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
+import Text from "components/Text/Text";
 
 
 const ActionRow = ({
@@ -107,7 +107,6 @@ const ActionRow = ({
             color: iconColor,
 
             fontSize: theme.text.baseSize,
-            fontWeight: "600"
         }
     });
 

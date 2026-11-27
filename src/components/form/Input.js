@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import {
     View,
-    Text,
     TextInput,
     Pressable,
     StyleSheet,
@@ -10,6 +9,7 @@ import {
 
 import { useTheme } from "theme/useTheme";
 import { useFormField } from "./FormContext";
+import Text from "components/Text/Text";
 
 export default function Input({
     name,

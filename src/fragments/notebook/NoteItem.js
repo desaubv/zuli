@@ -1,5 +1,4 @@
 import Line from 'components/layout/Line';
-import Bold from 'components/Text/Bold';
 import Text from 'components/Text/Text';
 import React from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
@@ -41,7 +40,7 @@ const NoteItem = () => {
 
     return (
         <View style={styles.container}>
-            <Bold>Titulo</Bold>
+            <Text font="bold">Titulo</Text>
             <Line
                 bottom={theme.spacing.sm}
                 top={theme.spacing.xs}

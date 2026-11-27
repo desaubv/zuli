@@ -8,7 +8,6 @@ import React, {
 
 import {
     View,
-    Text,
     Pressable,
     StyleSheet,
     Modal,
@@ -27,6 +26,7 @@ import {
 
 import { useTheme } from "theme/useTheme";
 import { FormContext } from "./FormContext";
+import Text from "components/Text/Text";
 
 export default function FileUpload({
     name,
@@ -368,7 +368,6 @@ export default function FileUpload({
 
         buttonText: {
             fontSize: theme.text.baseSize,
-            fontWeight: "600",
             color: theme.colors.primary,
             textAlign: "center",
         },

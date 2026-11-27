@@ -251,7 +251,6 @@ const Stepper = forwardRef(({
         number: {
             color: theme.colors.border,
             fontSize: theme.text.baseSize,
-            fontWeight: "600",
         },
 
         numberActive: {
@@ -267,7 +266,6 @@ const Stepper = forwardRef(({
 
         labelActive: {
             color: theme.colors.primary,
-            fontWeight: "600",
         },
 
         content: {

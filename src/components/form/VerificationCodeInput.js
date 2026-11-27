@@ -8,7 +8,6 @@ import React, {
 
 import {
     View,
-    Text,
     TextInput,
     Pressable,
     StyleSheet,
@@ -16,6 +15,7 @@ import {
 
 import { useTheme } from "theme/useTheme";
 import { useFormField } from "./FormContext";
+import Text from "components/Text/Text";
 
 export default function VerificationCodeInput({
     name,
@@ -290,7 +290,6 @@ export default function VerificationCodeInput({
             textAlign: "center",
             textAlignVertical: "center",
             fontSize: theme.text.baseSize * 1.3,
-            fontWeight: "600",
             color: theme.colors.text.text,
         },
 

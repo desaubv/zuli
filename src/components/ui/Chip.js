@@ -98,7 +98,6 @@ const Chip = ({
         text: {
             color: baseColor,
             fontSize: theme.text.smallSize,
-            fontWeight: "700"
         }
     });
 

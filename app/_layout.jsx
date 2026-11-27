@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-import { Stack } from "expo-router";
-
-import { NavigationItem } from "components/navigation/NavigationBar";
-import AppLayout from "components/layout/AppLayout";
 import { ActivityIndicator, View } from "react-native";
 
 import { ThemeProvider } from "theme/themeProvider";
@@ -10,18 +6,20 @@ import { ThemeProvider } from "theme/themeProvider";
 import { initializeDatabase } from "database/migrations";
 import NotificationService from "services/notification";
 
-import {
-    House,
-    CircleCheck,
-    Calendar,
-    UserGroup,
-    Pill,
-    Notebook
-} from "lucide-react-native";
 import MainLayout from "components/layout/MainLayout";
+import { Outfit_100Thin, Outfit_400Regular, Outfit_500Medium, Outfit_600SemiBold, Outfit_700Bold, Outfit_800ExtraBold, useFonts } from "@expo-google-fonts/outfit";
 
 export default function RootLayout() {
     const [ready, setReady] = useState(false);
+
+    const [fontsLoaded] = useFonts({
+        "Outfil-Thin":      Outfit_100Thin,
+        "Outfil-Regular":   Outfit_400Regular,
+        "Outfil-Medium":    Outfit_500Medium,
+        "Outfil-SemiBold":  Outfit_600SemiBold,
+        "Outfil-Bold":      Outfit_700Bold,
+        "Outfil-ExtraBold": Outfit_800ExtraBold,
+    })
 
     useEffect(() => {
         async function initializeDB() {
@@ -41,7 +39,7 @@ export default function RootLayout() {
         initializeNotifications();
     }, []);
 
-    if (!ready) {
+    if (!ready || !fontsLoaded) {
         return (
             <View style={{ flex: 1, justifyContent: "center" }}>
                 <ActivityIndicator />

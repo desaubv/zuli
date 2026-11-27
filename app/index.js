@@ -1,7 +1,10 @@
 import Modal from "components/modal/Modal";
+import Subtitle from "components/Text/Subtitle";
+import Text from "components/Text/Text";
+import Title from "components/Text/Title";
 import Button from "components/ui/Button";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import NotificationService from "services/notification";
 const { useTheme } = require("theme/useTheme");
 
@@ -19,11 +22,6 @@ export default function HomeScreen() {
             flex: 1,
             padding: 24,
         },
-
-        title: {
-            fontSize: 28,
-            fontWeight: "bold",
-        }
     });
 
     const notification = async () => {
@@ -37,11 +35,21 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
+            <Title
+            >Holap</Title>
+
+            <Subtitle>Wwebi wabo</Subtitle>
+
             <Text style={styles.title}>
                 Inicio
             </Text>
 
             <Text>
+                Bienvenido a mi aplicación.
+            </Text>
+           <Text
+            variant="secondary"
+           >
                 Bienvenido a mi aplicación.
             </Text>
 

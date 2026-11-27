@@ -1,7 +1,6 @@
 import Button from 'components/ui/Button';
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native';
 import { useTheme } from 'theme/useTheme';
 import Modal from './Modal';
 import Title from 'components/Text/Title';

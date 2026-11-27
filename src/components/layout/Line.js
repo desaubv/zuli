@@ -41,7 +41,6 @@ export default function Line({
 
         text: {
             fontSize: 16,
-            fontWeight: "500",
         },
     });
 

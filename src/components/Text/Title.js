@@ -5,9 +5,15 @@ import { useTheme } from "theme/useTheme";
 const Title = ({
     children,
     style,
+    font = "default",
     ...props
 }) => {
     const { theme } = useTheme();
+
+    const customFont = 
+        font == "default"
+            ? "bold"
+            : font;
 
     return (
         <Text
@@ -16,11 +22,10 @@ const Title = ({
                     color: theme.colors.text.heading,
                     fontSize: theme.text.headingSize,
                     lineHeight: theme.text.headingSize * 1.2,
-                    fontWeight: "700",
-                    marginBottom: theme.spacing.md,
                 },
                 style,
             ]}
+            font={customFont}
             {...props}
         >
             {children}

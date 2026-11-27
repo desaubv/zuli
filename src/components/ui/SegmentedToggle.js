@@ -47,7 +47,6 @@ const IconLabelToggle = ({
         label: {
             color: theme.colors.primary || "#3B82F6",
             fontSize: theme.text?.baseSize ?? 14,
-            fontWeight: "600",
         },
         iconContainer: {
             alignItems: "center",

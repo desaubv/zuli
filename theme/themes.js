@@ -4,19 +4,16 @@ const baseTheme = {
         baseSize: 16,
         subheadingSize: 18,
         headingSize: 24,
-        big: 30
+        big: 30,
 
-        // fonts: {
-        //     black:      "LexendDeca-Black",
-        //     bold:       "LexendDeca-Bold",
-        //     extrabold:  "LexendDeca-ExtraBold",
-        //     extraligth: "LexendDeca-ExtraLight",
-        //     light:      "LexendDeca-Light",
-        //     medium:     "LexendDeca-Medium",
-        //     regular:    "LexendDeca-Regular",
-        //     semibold:   "LexendDeca-SemiBold",
-        //     thin:       "LexendDeca-Thin",
-        // },
+        fonts: {
+            thin:       "Outfil-Thin",
+            regular:    "Outfil-Regular",
+            medium:     "Outfil-Medium",
+            semibold:   "Outfil-SemiBold",
+            bold:       "Outfil-Bold",
+            extrabold:  "Outfil-ExtraBold",
+        },
     },
 
     thicknesses: {
