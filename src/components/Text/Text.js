@@ -21,10 +21,7 @@ const Text = ({
 }) => {
     const { theme } = useTheme();
 
-    const defaultfont = 
-        variant == "secondary" 
-            ? "regular" 
-            : "medium";
+    const defaultfont = "regular";
 
     const styles = StyleSheet.create({
         text: {

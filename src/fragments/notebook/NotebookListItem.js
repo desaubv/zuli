@@ -4,12 +4,12 @@ import { useTheme } from 'theme/useTheme';
 import NotebookHeader from './NotebookHeader';
 import NoteItem from './NoteItem';
 
-const NotebookListItem = () => {
+const NotebookListItem = ({ notebook, handleEdit }) => {
     const { theme } = useTheme();
     const [expanded, setExpanded] = useState(true);
 
     const styles = StyleSheet.create({
-        
+
         container: {
             width: '100%',
             marginBottom: theme.spacing.md
@@ -26,7 +26,9 @@ const NotebookListItem = () => {
     return (
         <View style={styles.container}>
             <NotebookHeader
+                notebook={notebook}
                 onPress={() => setExpanded((prev) => !prev)}
+                onLongPress={handleEdit}
                 expanded={expanded}
             />
 

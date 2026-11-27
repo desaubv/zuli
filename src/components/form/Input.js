@@ -26,6 +26,7 @@ export default function Input({
     iconLeft: IconLeft,
     iconRight: IconRight,
     onIconRightPress,
+    iconColor,
 
     secureTextEntry = false,
     keyboardType = "default",
@@ -43,6 +44,13 @@ export default function Input({
     regexMessage = "El formato no es válido.",
 
     transformFunction,
+
+    multiline = false,
+    numberOfLines = 4,
+    minHeight,
+    textAlignVertical,
+
+    bgColor,
 
     ...props
 }) {
@@ -64,11 +72,10 @@ export default function Input({
     const handleChangeText = onChangeText ?? setFormValue;
 
     const heights = {
-        "sm": 55,
-        "md": 64,
-        "lg": 75
+        "sm": 55 - 20,
+        "md": 64 - 20,
+        "lg": 75 - 20
     }
-
 
     const handleTextChange = (text) => {
         const transformedValue = transformFunction
@@ -121,14 +128,19 @@ export default function Input({
         },
 
         container: {
-            height: heights[height] ?? heights["md"],
+            height: multiline ? undefined : heights[height] ?? heights["md"],
+            minHeight: multiline
+                ? minHeight ?? numberOfLines * 24 + 32
+                : undefined,
+
             borderWidth: theme.thicknesses.xs,
             borderColor: theme.colors.border,
             borderRadius: theme.radius[radius] ?? theme.radius["md"],
-            backgroundColor: theme.colors.surface,
+            backgroundColor: bgColor ? bgColor : theme.colors.surface,
             flexDirection: "row",
-            alignItems: "center",
+            alignItems: multiline ? "flex-start" : "center",
             paddingHorizontal: 16,
+            paddingVertical: multiline ? 12 : 0,
             opacity: isEditable ? 1 : 0.6,
         },
 
@@ -142,11 +154,16 @@ export default function Input({
 
         input: {
             flex: 1,
-            height: "100%",
+            fontFamily: theme.text.fonts.regular,
+            height: multiline ? undefined : "100%",
+            minHeight: multiline ? numberOfLines * 24 : undefined,
             fontSize: theme.text.baseSize,
             color: theme.colors.text.text,
             paddingVertical: 0,
             paddingHorizontal: 0,
+            textAlignVertical: textAlignVertical ?? (
+                multiline ? "top" : "center"
+            ),
         },
 
         inputWithLeftIcon: {},
@@ -191,7 +208,7 @@ export default function Input({
                 {IconLeft && (
                     <IconLeft
                         size={24}
-                        color="#53677D"
+                        color={iconColor || theme.colors.primary}
                         strokeWidth={2}
                         style={styles.leftIcon}
                     />
@@ -207,6 +224,8 @@ export default function Input({
                     autoCapitalize={autoCapitalize}
                     autoCorrect={autoCorrect}
                     editable={isEditable}
+                    multiline={multiline}
+                    numberOfLines={multiline ? numberOfLines : undefined}
                     style={[
                         styles.input,
                         IconLeft && styles.inputWithLeftIcon,
@@ -225,7 +244,7 @@ export default function Input({
                     >
                         <IconRight
                             size={24}
-                            color="#53677D"
+                            color={iconColor || theme.colors.primary}
                             strokeWidth={2}
                         />
                     </Pressable>

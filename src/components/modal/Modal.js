@@ -1,4 +1,5 @@
 
+import Title from 'components/Text/Title';
 import Button from 'components/ui/Button';
 import { X } from 'lucide-react-native';
 import React, { useEffect } from 'react';
@@ -18,6 +19,7 @@ const Modal = ({
     animationType = "fade",
     showCloseButton = true,
     closeOnBackdropPress = false,
+    title,
     bgStyle,
     modalStyle,
     onClose = () => { },
@@ -63,6 +65,14 @@ const Modal = ({
             backgroundColor: "rgba(0,0,0,0.5)",
             cursor: "default"
         },
+
+        header: {
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+        },
+
         modalContent: {
             width: isMobile ? "85%" : "50%",
             flexDirection: "column",
@@ -79,8 +89,11 @@ const Modal = ({
 
         },
         closeIcon: {
-            marginLeft: "auto",
             marginVertical: theme.spacing.xs,
+            opacity: showCloseButton ? 1 : 0
+        },
+        title: {
+            marginVertical: theme.spacing.md,
         }
     });
 
@@ -99,23 +112,37 @@ const Modal = ({
                     style={[style.modalContent, modalStyle]}
                     onPress={(event) => event.stopPropagation()}
                 >
-                    {showCloseButton && (
-                        <View style={{ width: "100%" }}>
-                            <Button
-                                variant="ghost"
-                                iconSize={22}
-                                iconColor={theme.colors.text.text}
-                                onPress={handleClose}
-                                icon={X}
-                                style={style.closeIcon}
-                            />
-                        </View>
-                    )}
+                    <View style={style.header}>
+                        <Button
+                            iconSize={22}
+                            icon={X}
+                            style={{ opacity: 0 }}
+
+                            disabled
+                        />
+                        {
+                            title ? (
+                                <Title Title
+                                    style={style.title}
+                                >{title}</Title>
+                            ) : null
+                        }
+                        <Button
+                            variant="ghost"
+                            iconSize={22}
+                            iconColor={theme.colors.text.text}
+                            onPress={handleClose}
+                            icon={X}
+                            style={style.closeIcon}
+
+                            disabled={!showCloseButton}
+                        />
+                    </View>
 
                     {children}
                 </Pressable>
             </Pressable>
-        </ModalRN>
+        </ModalRN >
     );
 };
 

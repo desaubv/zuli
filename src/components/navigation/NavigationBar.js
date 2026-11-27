@@ -159,6 +159,7 @@ const NavigationBar = ({ children, onLayoutChange }) => {
             color: theme.colors.text.heading,
             fontSize: theme.text.headingSize,
             lineHeight: theme.text.headingSize,
+            cursor: "default"
         }
     });
 
@@ -285,9 +286,9 @@ const NavigationItem = ({
         },
 
         text: {
-            fontSize: mobile
-                ? theme.text.xsSize ?? 11
-                : theme.text.baseSize,
+            // fontSize: mobile
+            //      theme.text.xs ?? 11
+            //     : theme.text.baseSize,
 
             textAlign: mobile ? "center" : "left",
 
@@ -312,8 +313,9 @@ const NavigationItem = ({
                 style={styles.button}
                 iconStrokeWidth={isActive ? 3 : 2}
                 iconColor={isActive ? (collapsed ? accentColor : styles.text.color) : undefined}
+                
                 textStyle={styles.text}
-
+                fontSize={mobile ? 9 : "default"}
             >
                 {iconOnly ? undefined : label}
             </Button>

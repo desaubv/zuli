@@ -18,6 +18,8 @@ const Button = ({
     onPress,
 
     variant = "primary",
+    fontSize="default",
+    font="default",
 
     iconLeft,
     iconRight,
@@ -145,7 +147,10 @@ const Button = ({
 
         text: {
             color: colorIcon,
-            fontSize: theme.text.baseSize,
+            fontSize: 
+                fontSize == "default" 
+                    ? theme.text.baseSize 
+                    : fontSize,
         }
     });
 
@@ -185,6 +190,7 @@ const Button = ({
 
                     {children && (
                         <Text
+                            font={font}
                             style={[styles.text, textStyle]}
                             numberOfLines={numberOfLines}
                         >

@@ -1,15 +1,22 @@
 import Subtitle from 'components/Text/Subtitle';
+import DynamicIcon from 'components/ui/DynamicIcon';
 import { Book, ChevronDown, ChevronUp } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight, Pressable } from 'react-native';
 import { useTheme } from 'theme/useTheme';
 
 const NotebookHeader = ({
+    notebook,
     onPress,
-    expanded=true
+    onLongPress,
+    expanded = true
 }) => {
     const { theme } = useTheme();
-
+    const {
+        title,
+        color,
+        icon
+    } = notebook;
     const styles = StyleSheet.create({
         container: {
             width: '100%',
@@ -25,7 +32,7 @@ const NotebookHeader = ({
         line: {
             width: '100%',
             height: 3,
-            backgroundColor: theme.colors.primary,
+            backgroundColor: color ? color : theme.colors.primary,
         },
         icon: {
             marginLeft: 'auto'
@@ -33,13 +40,18 @@ const NotebookHeader = ({
     });
 
     return (
-        <Pressable 
+        <Pressable
             style={styles.container}
             onPress={onPress}
+            onLongPress={onLongPress}
         >
             <View style={styles.title}>
-                <Book size={24} color={theme.colors.primary} />
-                <Subtitle>Notebook (1)</Subtitle>
+                <DynamicIcon
+                    name={icon}
+                    size={24}
+                    color={color ? color : theme.colors.primary}
+                />
+                <Subtitle>{title} (1)</Subtitle>
 
                 {
                     expanded
@@ -48,7 +60,7 @@ const NotebookHeader = ({
                 }
             </View>
 
-            <View style={styles.line}/>
+            <View style={styles.line} />
 
         </Pressable>
     );
