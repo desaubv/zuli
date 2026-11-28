@@ -24,6 +24,7 @@ const MainLayout = () => {
                         label="Inicio"
                         href="/"
                         icon={House}
+                        disabled
                     />
 
                     <NavigationItem
@@ -36,24 +37,28 @@ const MainLayout = () => {
                         label="Tareas"
                         href="/tasks"
                         icon={CircleCheck}
+                        disabled
                     />
 
                     <NavigationItem
                         label="Calendario"
                         href="/calendar"
                         icon={Calendar}
+                        disabled
                     />
 
                     <NavigationItem
                         label="Reuniones"
                         href="/meetings"
                         icon={UserGroup}
+                        disabled
                     />
 
                     <NavigationItem
                         label="Medicamentos"
                         href="/medications"
                         icon={Pill}
+                        disabled
                     />
                 </>
             }

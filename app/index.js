@@ -3,6 +3,7 @@ import Subtitle from "components/Text/Subtitle";
 import Text from "components/Text/Text";
 import Title from "components/Text/Title";
 import Button from "components/ui/Button";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import NotificationService from "services/notification";
@@ -14,7 +15,7 @@ export default function HomeScreen() {
     const [ modal, setModal ] = useState(false);
 
     useEffect(() => {
-        NotificationService.initialize();
+        router.replace("/notebooks")
     }, []);
 
     const styles = StyleSheet.create({

@@ -217,6 +217,8 @@ const NavigationItem = ({
     collapsed = false,
     mobile = false,
 
+    disabled=false,
+
     onPress
 }) => {
     const { theme } = useTheme();
@@ -301,6 +303,7 @@ const NavigationItem = ({
             <Button
                 href={href}
                 onPress={onPress}
+                disabled={disabled}
 
                 variant="ghost"
 
