@@ -8,6 +8,7 @@ import NotificationService from "services/notification";
 
 import MainLayout from "components/layout/MainLayout";
 import { Outfit_100Thin, Outfit_400Regular, Outfit_500Medium, Outfit_600SemiBold, Outfit_700Bold, Outfit_800ExtraBold, useFonts } from "@expo-google-fonts/outfit";
+import { GoogleSansCode_400Regular } from "@expo-google-fonts/google-sans-code";
 
 export default function RootLayout() {
     const [ready, setReady] = useState(false);
@@ -19,6 +20,8 @@ export default function RootLayout() {
         "Outfil-SemiBold":  Outfit_600SemiBold,
         "Outfil-Bold":      Outfit_700Bold,
         "Outfil-ExtraBold": Outfit_800ExtraBold,
+
+        "Google-Sans-Code": GoogleSansCode_400Regular
     })
 
     useEffect(() => {

@@ -18,7 +18,12 @@ const NewNoteItem = ({idNotebook}) => {
     const handleCreate = async() => {
         try{
             const result = await NoteRepository.createEmptyNote(idNotebook);
-            router.push("/notebooks/"+result.lastInsertRowId);
+            router.push({
+                pathname: "/notebooks/"+result.lastInsertRowId,
+                params: {
+                    edit: true
+                }
+            });
         }catch(err){
             console.error(err);
             alert("Ocurrio un error", err);

@@ -26,7 +26,12 @@ const NoteItem = ({ note, getNotebooks }) => {
     }, [confirm]);
 
     const handleRedirect = () => {
-        router.push("/notebooks/" + note.id_note)
+        router.push({
+                pathname: "/notebooks/"+note.id_note,
+                params: {
+                    edit: false
+                }
+            });
     }
 
     const handleDelete = async () => {
@@ -89,7 +94,7 @@ const NoteItem = ({ note, getNotebooks }) => {
                 isOpen={confirm}
                 setIsOpen={setConfirm}
                 title="¿Eliminar nota?"
-                content={`Estás a punto de eliminar la nota "${note.title}". Esta acción es permanente y no se puede deshacer. ¿Deseas continuar?`}
+                content={`Estás a punto de eliminar la nota "${note.title || "Sin título"}". Esta acción es permanente y no se puede deshacer. ¿Deseas continuar?`}
                 onConfirm={handleDelete}
             />
         </>

@@ -13,6 +13,8 @@ const baseTheme = {
             semibold:   "Outfil-SemiBold",
             bold:       "Outfil-Bold",
             extrabold:  "Outfil-ExtraBold",
+
+            code: "Google-Sans-Code"
         },
     },
 
@@ -50,7 +52,8 @@ const baseTheme = {
 
     colors: {
         "background": "#ffffff",
-        "surface": "#E2E8F0",
+        "surface": "#e2e8f0",
+        "surfaceSecondary": "#edf2f8",
 
         "primary": "#0F766E",
         "secondary": "#14B8A6",

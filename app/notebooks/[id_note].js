@@ -5,8 +5,9 @@ import Text from 'components/Text/Text';
 import Button from 'components/ui/Button';
 import NoteRepository from 'database/repositories/note';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft, Eye, Pencil } from 'lucide-react-native';
 import React, { useEffect, useState, useRef } from 'react';
+import Markdown from 'react-native-markdown-display';
 import {
     View,
     TextInput,
@@ -14,18 +15,21 @@ import {
     KeyboardAvoidingView,
     Platform,
     useWindowDimensions,
+    ScrollView,
 } from 'react-native';
 import { formatDate } from 'services/dates';
 
 import { useTheme } from 'theme/useTheme';
+import Line from 'components/layout/Line';
 
 const Note = () => {
     const { theme } = useTheme();
-    const { id_note } = useLocalSearchParams();
+    const { edit, id_note } = useLocalSearchParams();
     const { width } = useWindowDimensions();
 
     const [note, setNote] = useState(null);
     const [isDirty, setIsDirty] = useState(false);
+    const [editMode, setEditMode] = useState(edit === "true" ? true : false);
 
     const noteRef = useRef(null);
     const revisionRef = useRef(0);
@@ -115,6 +119,10 @@ const Note = () => {
         router.replace('/notebooks');
     };
 
+    const handleEdit = () => {
+        setEditMode(!editMode);
+    }
+
     const wordCount = note?.content?.trim()
         ? note.content.trim().split(/\s+/).length
         : 0;
@@ -131,31 +139,46 @@ const Note = () => {
             flex: 1,
         },
 
+        headerTitle: {
+            paddingHorizontal: theme.spacing.md,
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start"
+        },
+
         editor: {
             flex: 1,
-            paddingHorizontal: 24,
         },
 
         titleInput: {
+            width: isMobile ? undefined : "100%",
             fontSize: 30,
             fontFamily: theme.text.fonts.semibold,
             color: theme.text.primary,
+            margin: 0,
+            padding: 0
         },
 
         divider: {
             height: 1,
+            marginHorizontal: theme.spacing.md,
             backgroundColor: theme.border?.primary || theme.colors.surface,
         },
 
         contentInput: {
+            paddingHorizontal: theme.spacing.md,
+            backgroundColor: theme.colors.surface+"81",
+            borderRadius: theme.radius.md,
             flex: 1,
             fontSize: 16,
             lineHeight: 27,
             color: theme.text.primary,
             fontFamily: theme.text.fonts.regular,
             textAlignVertical: 'top',
-            paddingVertical: 12,
+            paddingVertical: theme.spacing.md,
             outlineStyle: 'none',
+            marginHorizontal: theme.spacing.xs
         },
 
         footer: {
@@ -178,6 +201,81 @@ const Note = () => {
             left: -theme.spacing.md,
         }
     });
+
+    const markdownStyles = {
+        body: {
+            maxWidth: isMobile ? undefined : "90%",
+            paddingHorizontal: theme.spacing.md,
+
+            color: theme.text.primary,
+            fontSize: theme.text.baseSize,
+            fontFamily: theme.text.fonts.regular,
+            lineHeight: 27,
+        },
+
+        heading1: {
+            fontSize: 25,
+            fontFamily: theme.text.fonts.bold,
+            color: theme.text.primary,
+        },
+
+        heading2: {
+            fontSize: 22,
+            fontFamily: theme.text.fonts.semibold,
+            color: theme.text.primary,
+        },
+
+        heading3: {
+            fontSize: 18,
+            fontFamily: theme.text.fonts.semibold,
+            color: theme.text.primary,
+        },
+
+        paragraph: {
+            marginVertical: 8,
+            fontFamily: theme.text.fonts.regular,
+        },
+
+        code_inline: {
+            backgroundColor: theme.colors.surface,
+            borderRadius: 8,
+            
+            fontFamily: theme.text.fonts.code,
+        },
+
+        code_block: {
+            backgroundColor: theme.colors.surface,
+            borderRadius: 8,
+            padding: 12,
+            
+            fontFamily: theme.text.fonts.code,
+        },
+
+        fence: {
+            backgroundColor: theme.colors.surface,
+            borderRadius: 8,
+            padding: 12,
+            fontFamily: theme.text.fonts.code,
+        },
+
+        blockquote: {
+            borderLeftColor: theme.colors.primary,
+            borderLeftWidth: 3,
+            paddingLeft: 12,
+        },
+
+        link: {
+            color: theme.colors.secondary,
+        },
+
+        hr: {
+            marginBottom: theme.spacing.sm,
+            marginTop: theme.spacing.md,
+            backgroundColor: theme.colors.border,
+
+            height: 2,
+        }
+    };
 
     return note ? (
         <View style={{ flex: 1 }}>
@@ -202,32 +300,66 @@ const Note = () => {
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             >
                 <View style={styles.editor}>
-                    <TextInput
-                        style={styles.titleInput}
-                        value={note.title}
-                        onChangeText={(value) =>
-                            handleChange('title', value)
+                    <View style={styles.headerTitle}>
+
+                        {
+                            editMode ? (
+                                <TextInput
+                                    style={styles.titleInput}
+                                    value={note.title}
+                                    onChangeText={(value) =>
+                                        handleChange('title', value)
+                                    }
+                                    placeholder="Sin título"
+                                    placeholderTextColor={theme.colors.text.secondary}
+                                    multiline
+                                    maxLength={150}
+                                />
+                            ) : (
+                                <Text style={styles.titleInput}>{note.title || "Sin título"}</Text>
+                            )
                         }
-                        placeholder="Sin título"
-                        placeholderTextColor={theme.colors.text.secondary}
-                        multiline
-                        maxLength={150}
+                        <Button
+                            style={{ margin: 0 }}
+                            icon={editMode ? Eye : Pencil}
+                            variant="ghost"
+                            iconSize={25}
+                            onPress={handleEdit}
+                        />
+                    </View>
+
+                    <Line
+                        width={"99%"}
+                        bottom={theme.spacing.sm}
                     />
 
-                    <View style={styles.divider} />
-
-                    <TextInput
-                        style={styles.contentInput}
-                        value={note.content}
-                        onChangeText={(value) =>
-                            handleChange('content', value)
-                        }
-                        placeholder="Comienza a escribir..."
-                        placeholderTextColor={theme.colors.text.secondary}
-                        multiline
-                        textAlignVertical="top"
-                        scrollEnabled
-                    />
+                    {
+                        editMode ? (
+                            <TextInput
+                                style={styles.contentInput}
+                                value={note.content}
+                                onChangeText={(value) =>
+                                    handleChange('content', value)
+                                }
+                                placeholder="Comienza a escribir..."
+                                placeholderTextColor={theme.colors.text.secondary}
+                                multiline
+                                textAlignVertical="top"
+                                scrollEnabled
+                            />
+                        ) : (
+                            <ScrollView
+                                style={{ flex: 1 }}
+                                showsVerticalScrollIndicator={false}
+                            >
+                                <Markdown
+                                    style={markdownStyles}
+                                >
+                                    {note.content || 'Nota vacía'}
+                                </Markdown>
+                            </ScrollView>
+                        )
+                    }
 
                     <View style={styles.footer}>
                         <Text style={styles.counter}>
