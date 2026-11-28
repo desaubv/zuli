@@ -51,7 +51,7 @@ const NotebookHeader = ({
                     size={24}
                     color={color ? color : theme.colors.primary}
                 />
-                <Subtitle>{title} (1)</Subtitle>
+                <Subtitle>{title} ({notebook.notes.length || 0})</Subtitle>
 
                 {
                     expanded

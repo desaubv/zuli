@@ -24,6 +24,7 @@ const Modal = ({
     modalStyle,
     onClose = () => { },
     children,
+    statusBarTranslucent
 }) => {
     const { theme } = useTheme();
     const { width } = useWindowDimensions();
@@ -75,13 +76,14 @@ const Modal = ({
 
         modalContent: {
             width: isMobile ? "85%" : "50%",
+            maxWidth: !isMobile ? 650 : undefined,
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
             paddingVertical: theme.spacing.md,
             paddingHorizontal: theme.spacing.sm,
             paddingTop: showCloseButton ? 0 : theme.spacing.md,
-            backgroundColor: theme.colors.surface,
+            backgroundColor: theme.colors.background,
             borderColor: theme.colors.border,
             borderWidth: 1,
             borderRadius: theme.radius.md,
@@ -103,6 +105,7 @@ const Modal = ({
             visible={isOpen}
             animationType={animationType}
             onRequestClose={handleClose}
+            statusBarTranslucent={statusBarTranslucent}
         >
             <Pressable
                 style={[style.modalContainer, bgStyle]}

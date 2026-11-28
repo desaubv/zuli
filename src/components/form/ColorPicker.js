@@ -3,13 +3,12 @@ import React, { useState } from "react";
 
 import {
     View,
-    TextInput,
     Pressable,
-    Modal,
     StyleSheet,
     KeyboardAvoidingView,
     ScrollView,
     Platform,
+    TextInput,
 } from "react-native";
 
 import {
@@ -22,6 +21,9 @@ import WheelColorPicker from "react-native-wheel-color-picker";
 import { useTheme } from "theme/useTheme";
 import { useFormField } from "./FormContext";
 import Text from "components/Text/Text";
+import Modal from "components/modal/Modal";
+import Input from "./Input";
+import Button from "components/ui/Button";
 
 const DEFAULT_COLOR = "#087E8B";
 
@@ -122,7 +124,8 @@ export default function ColorPicker({
         text: theme.colors.text.text,
         primary: selectedColor ?? theme.colors.primary,
         background: bgColor ?? theme.colors.surface,
-        modalBackground: modalBackgroundColor ?? theme.colors.surface,
+        surface: theme.colors.surface,
+        modalBackground: modalBackgroundColor ?? theme.colors.background,
         border: theme.colors.border,
         error: theme.colors.error,
         muted: theme.colors.text.secondary ?? "#9AA9BA",
@@ -186,11 +189,12 @@ export default function ColorPicker({
         },
 
         input: {
+            fontFamily: theme.text.fonts.regular,
             minHeight: heights[height] ?? heights.md,
             borderWidth: theme.thicknesses.xs,
             borderColor: formError ? colors.error : colors.border,
             borderRadius: theme.radius[radius] ?? theme.radius.md,
-            backgroundColor: colors.background,
+            backgroundColor: colors.surface,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
@@ -241,13 +245,12 @@ export default function ColorPicker({
         },
 
         modal: {
-            width: "100%",
+            width: "95%",
             maxWidth: 440,
             maxHeight: "90%",
             backgroundColor: colors.modalBackground,
-            borderRadius: theme.radius.lg ?? 16,
-            padding: 20,
             gap: 16,
+            paddingVertical: theme.spacing.md,
             ...modalStyle,
         },
 
@@ -320,6 +323,7 @@ export default function ColorPicker({
             paddingHorizontal: 12,
             color: colors.text,
             fontSize: theme.text.baseSize,
+            fontFamily: theme.text.fonts.regular,
         },
 
         applyButton: {
@@ -432,157 +436,104 @@ export default function ColorPicker({
             )}
 
             {/* Modal */}
-
             <Modal
-                visible={visible}
-                transparent
-                animationType="fade"
-                onRequestClose={closeModal}
-                statusBarTranslucent
+                isOpen={visible}
+                setIsOpen={setVisible}
+                title={modalTitle}
+                modalStyle={styles.modal}
             >
-                <KeyboardAvoidingView
-                    style={{ flex: 1 }}
-                    behavior={
-                        Platform.OS === "ios"
-                            ? "padding"
-                            : "height"
-                    }
-                >
-                    <View style={styles.overlay}>
-                        <View style={styles.modal}>
+                <View style={styles.modal}>
 
-                            <ScrollView
-                                keyboardShouldPersistTaps="handled"
-                                showsVerticalScrollIndicator={false}
-                                contentContainerStyle={{
-                                    gap: 16,
-                                }}
-                            >
+                    {/* Rueda cromática */}
+                    <View style={styles.wheelContainer}>
+                        <WheelColorPicker
+                            color={
+                                validCustomHex
+                                    ? normalizedCustomHex
+                                    : DEFAULT_COLOR
+                            }
+                            onColorChange={handleWheelChange}
+                            onColorChangeComplete={handleWheelChange}
+                            thumbSize={thumbSize}
+                            sliderSize={sliderSize}
+                            noSnap
+                            row={false}
+                            swatches={false}
+                            useNativeDriver={false}
+                            style={styles.wheel}
+                        />
+                    </View>
 
-                                {/* Encabezado */}
+                    {/* Color HEX */}
 
-                                <View style={styles.modalHeader}>
-                                    <Text style={styles.modalTitle}>
-                                        {modalTitle}
-                                    </Text>
+                    {showCustomInput && (
+                        <View style={styles.customSection}>
 
-                                    <Pressable
-                                        onPress={closeModal}
-                                        style={styles.closeButton}
-                                        hitSlop={8}
-                                    >
-                                        <X
-                                            size={22}
-                                            color={colors.text}
-                                        />
-                                    </Pressable>
-                                </View>
+                            <Text style={styles.sectionTitle}>
+                                Color personalizado
+                            </Text>
 
-                                {/* Rueda cromática */}
+                            <View style={styles.customRow}>
 
-                                <View style={styles.wheelContainer}>
-                                    <WheelColorPicker
-                                        color={
-                                            validCustomHex
+                                <View
+                                    style={[
+                                        styles.customPreview,
+                                        {
+                                            backgroundColor: validCustomHex
                                                 ? normalizedCustomHex
-                                                : DEFAULT_COLOR
-                                        }
-                                        onColorChange={handleWheelChange}
-                                        onColorChangeComplete={handleWheelChange}
-                                        thumbSize={thumbSize}
-                                        sliderSize={sliderSize}
-                                        noSnap
-                                        row={false}
-                                        swatches={false}
-                                        useNativeDriver={false}
-                                        style={styles.wheel}
-                                    />
-                                </View>
+                                                : "transparent",
+                                        },
+                                    ]}
+                                />
 
-                                {/* Color HEX */}
-
-                                {showCustomInput && (
-                                    <View style={styles.customSection}>
-
-                                        <Text style={styles.sectionTitle}>
-                                            Color personalizado
-                                        </Text>
-
-                                        <View style={styles.customRow}>
-
-                                            <View
-                                                style={[
-                                                    styles.customPreview,
-                                                    {
-                                                        backgroundColor: validCustomHex
-                                                            ? normalizedCustomHex
-                                                            : "transparent",
-                                                    },
-                                                ]}
-                                            />
-
-                                            <TextInput
-                                                value={customHex}
-                                                onChangeText={setCustomHex}
-                                                placeholder="#087E8B"
-                                                placeholderTextColor={colors.muted}
-                                                style={[
-                                                    styles.customInput,
-                                                    customInputStyle,
-                                                ]}
-                                                autoCapitalize="characters"
-                                                autoCorrect={false}
-                                                maxLength={7}
-                                                selectTextOnFocus
-                                            />
-
-                                            <Pressable
-                                                onPress={applyCustomColor}
-                                                disabled={!validCustomHex}
-                                                style={[
-                                                    styles.applyButton,
-                                                    !validCustomHex &&
-                                                    styles.disabledButton,
-                                                ]}
-                                            >
-                                                <Text style={styles.applyText}>
-                                                    Aplicar
-                                                </Text>
-                                            </Pressable>
-
-                                        </View>
-                                    </View>
-                                )}
-
-                                {/* Sin color */}
-
-                                {allowTransparent && (
-                                    <Pressable
-                                        onPress={() => selectColor("")}
-                                        style={styles.transparentButton}
-                                    >
-                                        <Text style={styles.transparentText}>
-                                            {transparentLabel}
-                                        </Text>
-                                    </Pressable>
-                                )}
-
-                                {/* Cerrar */}
+                                <TextInput
+                                    value={customHex}
+                                    onChangeText={setCustomHex}
+                                    placeholder="#087E8B"
+                                    placeholderTextColor="#9AA9BA"
+                                    style={[
+                                        styles.customInput,
+                                        customInputStyle,
+                                    ]}
+                                    autoCapitalize="characters"
+                                    autoCorrect={false}
+                                    maxLength={7}
+                                    selectTextOnFocus
+                                />
 
                                 <Pressable
-                                    onPress={closeModal}
-                                    style={styles.cancelButton}
+                                    onPress={applyCustomColor}
+                                    disabled={!validCustomHex}
+                                    style={[
+                                        styles.applyButton,
+                                        !validCustomHex &&
+                                        styles.disabledButton,
+                                    ]}
                                 >
-                                    <Text style={styles.cancelText}>
-                                        {cancelText}
+                                    <Text style={styles.applyText}>
+                                        Aplicar
                                     </Text>
-                                </Pressable>
+                                </Pressable> 
 
-                            </ScrollView>
+                            </View>
                         </View>
-                    </View>
-                </KeyboardAvoidingView>
+                    )}
+
+                    {/* Sin color */}
+
+                    {allowTransparent && (
+                        <Pressable
+                            onPress={() => selectColor("")}
+                            style={styles.transparentButton}
+                        >
+                            <Text style={styles.transparentText}>
+                                {transparentLabel}
+                            </Text>
+                        </Pressable>
+                    )}
+                </View>
             </Modal>
+
         </View>
     );
 }

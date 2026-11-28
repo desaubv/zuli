@@ -5,15 +5,17 @@ import Input from "components/form/Input";
 import useForm from "components/form/useForm";
 import AppContainer from "components/layout/AppContainer";
 import Modal from "components/modal/Modal";
+import ModalConfirm from "components/modal/ModalConfirm";
 import Text from "components/Text/Text";
 import Title from "components/Text/Title";
 import Button from "components/ui/Button";
-import NotebookRepository from "database/repositories/notebook/notebookRepository";
+import NotebookRepository from "database/repositories/notebook";
 import NotebookListItem from "fragments/notebook/NotebookListItem";
 import { BookUser, Plus } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, useWindowDimensions, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from 'expo-haptics';
 
 const { useTheme } = require("theme/useTheme");
 
@@ -24,25 +26,36 @@ export default function NotesScreen() {
     const insets = useSafeAreaInsets();
 
     const [notebooks, setNotebooks] = useState([]);
+    const [selectedNotebook, setSelectedNotebook] = useState(null);
     const [newModalOpened, setNewModalOpened] = useState(false);
 
-    const [updateModalOpened, setUpdateModalOpened] = useState(false);
-    const [notebookToUpdate, setNotebookToUpdate] = useState(null);
-
     const getNotebooks = async () => {
-        const data = await NotebookRepository.getNotebooks();
+        setSelectedNotebook(null);
+
+        const result = await NotebookRepository.getNotebooks();
+        const data = result.map((nb) => {
+            return {
+                ...nb,
+                notes: JSON.parse(nb.notes)
+            }
+        })
+        console.log(data);
         setNotebooks(data);
     }
 
-    useEffect(() => {
+    useState(() => {
         getNotebooks();
     }, []);
-
 
     const styles = StyleSheet.create({
         container: {
             flex: 1,
             padding: 24,
+        },
+
+        listContainer: {
+            flexDirection: "column",
+            gap: 5
         },
 
         auxText: {
@@ -76,12 +89,17 @@ export default function NotesScreen() {
                         style={{ marginBottom: theme.spacing.md }}
                     >Cuadernos</Title>
 
-                    {notebooks.map((nb) =>
-                        <NotebookListItem
-                            notebook={nb}
-                            key={nb.id_notebook}
-                        />
-                    )}
+                    <View style={styles.listContainer}>
+                        {notebooks.map((nb) =>
+                            <NotebookListItem
+                                handleEdit={() => setSelectedNotebook(nb)}
+                                notebook={nb}
+
+                                key={nb.id_notebook}
+                            />
+                        )}
+                    </View>
+
 
                     {notebooks.length === 0 && (
                         <Text style={styles.auxText}>
@@ -105,12 +123,19 @@ export default function NotesScreen() {
                 modalOpened={newModalOpened}
                 setModalOpened={setNewModalOpened}
             />
+            <EditNotebookModal
+                notebook={selectedNotebook}
+                modalOpened={selectedNotebook !== null}
+                onClose={() => setSelectedNotebook(null)}
+                onSuccess={getNotebooks}
+            />
         </View>
     );
 }
 
 const NewNoteForm = ({ modalOpened, setModalOpened, onSuccess }) => {
     const { theme } = useTheme();
+
     const handleSubmit = async (values) => {
         const { title, color, icon } = values;
         console.log(values);
@@ -141,7 +166,7 @@ const NewNoteForm = ({ modalOpened, setModalOpened, onSuccess }) => {
         },
 
         input: {
-            marginBottom: theme.spacing.md
+            marginBottom: theme.spacing.sm
         }
     });
 
@@ -164,7 +189,6 @@ const NewNoteForm = ({ modalOpened, setModalOpened, onSuccess }) => {
                     required
                     iconLeft={BookUser}
 
-                    bgColor={theme.colors.background}
                     style={styles.input}
                 />
 
@@ -172,7 +196,6 @@ const NewNoteForm = ({ modalOpened, setModalOpened, onSuccess }) => {
                     label="Icono"
                     name="icon"
 
-                    bgColor={theme.colors.background}
                     style={styles.input}
                 />
 
@@ -180,16 +203,117 @@ const NewNoteForm = ({ modalOpened, setModalOpened, onSuccess }) => {
                     name="color"
                     label="Color"
 
-                    bgColor={theme.colors.background}
                     style={styles.input}
                 />
 
                 <Button
-                    style={{marginTop: theme.spacing.lg}}
+                    style={{ marginTop: theme.spacing.lg }}
                     onPress={form.submit}
                 >Crear</Button>
             </Form>
 
+        </Modal>
+    )
+}
+
+const EditNotebookModal = ({ notebook, modalOpened, onSuccess, onClose }) => {
+    if (!notebook) return null;
+
+    useState(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }, []);
+
+    const { theme } = useTheme();
+    const [confirm, setConfirm] = useState(false);
+
+    const handleDelete = async () => {
+        const result = await NotebookRepository.deleteNotebook(notebook.id_notebook);
+        onSuccess();
+    }
+
+    const handleSubmit = async (values) => {
+        const { title, color, icon } = values;
+
+        try {
+            const result = await NotebookRepository.updateNotebook(notebook.id_notebook, title, color, icon);
+            onSuccess();
+        } catch (err) {
+            console.error(err);
+            alert("Ocurrio un error", err);
+        }
+    }
+
+    const form = useForm({
+        initialValues: notebook,
+        onSubmit: handleSubmit,
+    });
+
+    const styles = StyleSheet.create({
+        form: {
+            width: "100%",
+            paddingHorizontal: theme.spacing.md
+        },
+
+        input: {
+            marginBottom: theme.spacing.sm
+        }
+    });
+
+    return (
+        <Modal
+            isOpen={modalOpened}
+            onClose={onClose}
+            title="Editar cuaderno"
+        >
+            <Form
+                form={form}
+                style={styles.form}
+            >
+                <Input
+                    label="Titulo"
+                    name="title"
+                    placeholder="Ingresa el titulo de tu cuaderno"
+                    requiredMessage="Debes ingresar el titulo."
+                    required
+                    iconLeft={BookUser}
+
+                    style={styles.input}
+                />
+
+                <IconPicker
+                    label="Icono"
+                    name="icon"
+
+                    style={styles.input}
+                />
+
+                <ColorPicker
+                    name="color"
+                    label="Color"
+
+                    style={styles.input}
+                />
+
+                <Button
+                    style={{ marginTop: theme.spacing.lg }}
+                    onPress={form.submit}
+                >Actualizar</Button>
+
+
+                <Button
+                    variant="secondary"
+                    style={{ marginTop: theme.spacing.sm }}
+                    onPress={() => setConfirm(true)}
+                >Eliminar</Button>
+            </Form>
+
+            <ModalConfirm
+                title="¿Eliminar libro?"
+                content={`Estás a punto de eliminar el libro "${notebook.title}" junto con todas las notas que contiene. Esta acción es permanente y no se puede deshacer. ¿Deseas continuar?`}
+                isOpen={confirm}
+                setIsOpen={setConfirm}
+                onConfirm={handleDelete}
+            />
         </Modal>
     )
 }

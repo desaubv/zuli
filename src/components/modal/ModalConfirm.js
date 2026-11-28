@@ -1,6 +1,6 @@
 import Button from 'components/ui/Button';
 import React from 'react'
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useTheme } from 'theme/useTheme';
 import Modal from './Modal';
 import Title from 'components/Text/Title';
@@ -24,6 +24,9 @@ const ModalConfirm = ({
     onCancel = () => { } 
 }) => {
     const { theme } = useTheme();
+    const { width, height } = useWindowDimensions();
+
+    const isMobile = width < 768;
 
     const handleConfirm = () => {
         onConfirm();
@@ -35,6 +38,10 @@ const ModalConfirm = ({
     }
 
     const customStyles = StyleSheet.create({
+        modal: {
+            maxWidth: !isMobile ? 550 : undefined,
+        },
+
         modalContent: {
             width: "100%",
             paddingHorizontal: theme.spacing.md,
@@ -68,12 +75,12 @@ const ModalConfirm = ({
             animationType={animationType}
             showCloseButton={false}
             bgStyle={bgStyle}
-            modalStyle={modalStyle}
+            modalStyle={[modalStyle, customStyles.modal]}
             closeOnBackdropPress={closeOnBackdropPress}
             onClose={onCancel}
+            title={title}
         >
             <View style={customStyles.modalContent}>
-                <Title style={[customStyles.modalTitle]}>{title}</Title>
                 <Text style={[customStyles.modalText, content ? { marginBottom: 30 } : {}]}>{content}</Text>
                 <View style={customStyles.modalButtons}>
                     <Button

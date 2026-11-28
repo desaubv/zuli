@@ -3,24 +3,28 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from 'theme/useTheme';
 import NotebookHeader from './NotebookHeader';
 import NoteItem from './NoteItem';
+import NewNoteItem from './NewNoteItem';
 
 const NotebookListItem = ({ notebook, handleEdit }) => {
     const { theme } = useTheme();
     const [expanded, setExpanded] = useState(true);
 
+    console.log(notebook.notes)
+
     const styles = StyleSheet.create({
 
         container: {
             width: '100%',
-            marginBottom: theme.spacing.md
+            paddingBottom: theme.spacing.md
         },
 
         items: {
             width: '100%',
             flexDirection: 'row',
-            justifyContent: "flex-start",
             flexWrap: 'wrap',
-            gap: `0.5%`
+            justifyContent: 'flex-start',
+            columnGap: '1%',
+            rowGap: theme.spacing.sm,
         }
     });
     return (
@@ -35,13 +39,19 @@ const NotebookListItem = ({ notebook, handleEdit }) => {
             {
                 expanded ? (
                     <View style={styles.items}>
-                        <NoteItem />
-                        <NoteItem />
-                        <NoteItem />
-                        <NoteItem />
-                        <NoteItem />
-                        <NoteItem />
-                        <NoteItem />
+                        {
+                            notebook.notes.map((note, index) => 
+                                <NoteItem
+                                    note={note}
+                                    key={"note-"+index}
+                                />
+                            )
+                        }
+
+                        <NewNoteItem
+                            idNotebook={notebook.id_notebook}
+                        />
+
                     </View>
                 ) : null
             }

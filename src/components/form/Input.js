@@ -30,7 +30,7 @@ export default function Input({
 
     secureTextEntry = false,
     keyboardType = "default",
-    autoCapitalize = "none",
+    autoCapitalize = "sentences",
     autoCorrect = false,
 
     height = "md",
