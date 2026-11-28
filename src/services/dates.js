@@ -5,11 +5,36 @@ const formatDate = (date) => {
 
     if (isNaN(target.getTime())) return "";
 
+    const diffMs = now.getTime() - target.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+
     const time = target.toLocaleTimeString("es-MX", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
     });
+
+    // Justo ahora
+    if (diffSeconds >= 0 && diffSeconds < 10) {
+        return "Justo ahora";
+    }
+
+    // Hace N segundos
+    if (diffSeconds >= 10 && diffSeconds < 60) {
+        return `Hace ${diffSeconds} segundos`;
+    }
+
+    // Hace N minutos
+    if (diffMinutes >= 1 && diffMinutes < 60) {
+        return `Hace ${diffMinutes} ${diffMinutes === 1 ? "minuto" : "minutos"}`;
+    }
+
+    // Hace N horas (hasta 6)
+    if (diffHours >= 1 && diffHours < 6) {
+        return `Hace ${diffHours} ${diffHours === 1 ? "hora" : "horas"}`;
+    }
 
     // Normalizar fechas para comparar únicamente el día
     const targetDay = new Date(
@@ -67,7 +92,6 @@ const formatDate = (date) => {
     return `${fullDate} ${time}`;
 };
 
-
 export {
     formatDate,
-}
+};

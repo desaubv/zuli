@@ -4,12 +4,11 @@ import { useTheme } from 'theme/useTheme';
 import NotebookHeader from './NotebookHeader';
 import NoteItem from './NoteItem';
 import NewNoteItem from './NewNoteItem';
+import { router } from 'expo-router';
 
 const NotebookListItem = ({ notebook, handleEdit }) => {
     const { theme } = useTheme();
     const [expanded, setExpanded] = useState(true);
-
-    console.log(notebook.notes)
 
     const styles = StyleSheet.create({
 
@@ -42,6 +41,7 @@ const NotebookListItem = ({ notebook, handleEdit }) => {
                         {
                             notebook.notes.map((note, index) => 
                                 <NoteItem
+                                    getNotebooks={() => router.replace("/notebooks")}
                                     note={note}
                                     key={"note-"+index}
                                 />

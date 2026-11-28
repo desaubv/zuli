@@ -9,7 +9,7 @@ export async function getDatabase() {
 
     if (!dbPromise) {
         dbPromise = (async () => {
-            const database = await SQLite.openDatabaseAsync("zuli.db");
+            const database = await SQLite.openDatabaseAsync("zuli2.db");
 
             await database.execAsync(`
                 PRAGMA journal_mode = WAL;

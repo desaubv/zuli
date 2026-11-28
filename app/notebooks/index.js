@@ -12,12 +12,12 @@ import Button from "components/ui/Button";
 import NotebookRepository from "database/repositories/notebook";
 import NotebookListItem from "fragments/notebook/NotebookListItem";
 import { BookUser, Plus } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, StyleSheet, useWindowDimensions, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from 'expo-haptics';
+import { useTheme } from "theme/useTheme";
 
-const { useTheme } = require("theme/useTheme");
 
 export default function NotesScreen() {
     const { theme } = useTheme();
@@ -39,7 +39,6 @@ export default function NotesScreen() {
                 notes: JSON.parse(nb.notes)
             }
         })
-        console.log(data);
         setNotebooks(data);
     }
 
@@ -138,7 +137,6 @@ const NewNoteForm = ({ modalOpened, setModalOpened, onSuccess }) => {
 
     const handleSubmit = async (values) => {
         const { title, color, icon } = values;
-        console.log(values);
 
         try {
             const result = await NotebookRepository.insertNotebook(title, color, icon);
@@ -220,7 +218,7 @@ const EditNotebookModal = ({ notebook, modalOpened, onSuccess, onClose }) => {
     if (!notebook) return null;
 
     useState(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     }, []);
 
     const { theme } = useTheme();

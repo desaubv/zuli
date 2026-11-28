@@ -1,6 +1,7 @@
 import Line from 'components/layout/Line';
 import Text from 'components/Text/Text';
 import NoteRepository from 'database/repositories/note';
+import { router } from 'expo-router';
 import { FilePlus } from 'lucide-react-native';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
@@ -17,7 +18,7 @@ const NewNoteItem = ({idNotebook}) => {
     const handleCreate = async() => {
         try{
             const result = await NoteRepository.createEmptyNote(idNotebook);
-            console.log(result);
+            router.push("/notebooks/"+result.lastInsertRowId);
         }catch(err){
             console.error(err);
             alert("Ocurrio un error", err);
@@ -28,8 +29,9 @@ const NewNoteItem = ({idNotebook}) => {
     const styles = StyleSheet.create({
         container: {
             aspectRatio: 4/3,
+            maxHeight: 250,
             width: isMobile ? '49.5%' : '24.25%',
-            marginVertical: theme.spacing.xs / 2,
+            marginVertical: theme.spacing.xs,
 
             padding: theme.spacing.md,
             paddingBottom: 0,

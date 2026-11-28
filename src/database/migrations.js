@@ -6,8 +6,6 @@ import * as SQLite from "expo-sqlite";
 export async function initializeDatabase() {
     const db = await getDatabase();
 
-    // await SQLite.deleteDatabaseAsync('zuli.db');
-
     await db.execAsync(`
         CREATE TABLE IF NOT EXISTS "notebook" (
             "id_notebook" INTEGER NOT NULL,

@@ -20,7 +20,8 @@ const NotebookHeader = ({
     const styles = StyleSheet.create({
         container: {
             width: '100%',
-            gap: theme.spacing.xs
+            gap: theme.spacing.xs, 
+            marginBottom: theme.spacing.sm
         },
 
         title: {
