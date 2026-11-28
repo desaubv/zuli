@@ -17,7 +17,9 @@
       }
     },
     "web": {
-      "favicon": "./assets/zuli_512.png"
+      "favicon": "./assets/zuli_512.png",
+      "bundler": "metro",
+      "output": "single"
     },
     "plugins": [
       "expo-router",
